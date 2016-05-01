@@ -11,6 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'PostsController@index');
+Route::resource('discussions','PostsController');
+Route::resource('comment','CommentsController');
+
+Route::get('/user/register', 'UsersController@register');
+Route::get('/user/login', 'UsersController@login');
+Route::get('/user/avatar', 'UsersController@avatar');
+Route::post('/user/register', 'UsersController@store');
+Route::post('/user/login', 'UsersController@signin');
+Route::post('/avatar', 'UsersController@changeAvatar');
+Route::get('/logout', 'UsersController@logout');

@@ -92,9 +92,23 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'name' => [
+            'required' => '用户名不能为空',
+            'min' => '名字不得少于3位',
         ],
+        'email' => [
+            'required' => '邮箱不能为空',
+            'unique' => '邮箱已存在',
+            'email' => '邮箱格式不合法',
+        ],
+        'password' => [
+            'required' => '密码不能为空',
+        ],
+        'password_confirmation' => [
+            'required' => '再次确认密码不能为空',
+        ],
+        
+        
     ],
 
     /*
