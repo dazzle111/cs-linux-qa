@@ -10,7 +10,7 @@
 </div>
 <div class="container">
 	<div class="row">
-		<div class="col-md-9" role="main">
+		<div class="col-md-10" role="main">
 		@foreach($discussions as $discussion)
 			<div class="media">
 			<div class="media-left">
@@ -20,17 +20,28 @@
 			</div>
 			<div class="media-body">
 			<h4 class="media-heading"><a href="/discussions/{{ $discussion->id }}">{{ $discussion->title }}</a></h4>
+			
 			<div class="media-conversation-meta">
 			<span class="media-conversation-replies">
-				<a href="/discussions/{{$discussion->id}}"> {{count($discussion->comments)}}</a>
-				回复
+				<div class="center-block"><a href="/discussions/{{$discussion->id}}" > {{count($discussion->comments)}}</a></div>
+				<i class="fa fa-envelope-square fa-3x " aria-hidden="true"></i>
 			</span>
 			</div>
-			{{ $discussion->user->name }}
+			<div>
+				<span class="username">
+				{{ $discussion->user->name }}发表于{{$discussion->created_at->diffForHumans()}}
+				</span>
+			</div>
+			<div class="item-excerpt col-md-10">
+				<span>{{$discussion->body}}</span>
+			</div>
 			</div>
 			</div>
 		@endforeach
 		</div>
 	</div>
+</div>
+<div class="col-md-8 pull-right">
+<?php echo $discussions->render();?>
 </div>
 @stop

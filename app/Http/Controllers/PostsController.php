@@ -23,7 +23,7 @@ class PostsController extends Controller
 	}
     public function index()
     {
-    	$discussions = Discussion::latest()->get();
+    	$discussions = Discussion::latest()->paginate(10);
         return view('forum.index',compact('discussions'));
     }
 
@@ -31,6 +31,10 @@ class PostsController extends Controller
     {
     	$discussion = Discussion::findOrFail($id);
         $html = $this->markdown->markdown($discussion->body);
+        foreach($discussion->comments as &$comment) {
+            $comment->body = $this->markdown->markdown($comment->body);
+        }
+        
     	return view('forum.show',compact('discussion', 'html'));
     }
 

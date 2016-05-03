@@ -12,6 +12,11 @@
     <script src="/js/jquery.Jcrop.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/jquery.form.js"></script>
+    <script src="/js/vue.min.js"></script>
+    <script src="/js/vue-resource.min.js"></script>
+    <script src="/js/jquery.atwho.min.js"></script>
+    <script src="/js/jquery.caret.min.js"></script>
+    <meta id="token" name="token" value="{{ csrf_token()}}">
 <head>
 <body>
    <nav class="navbar navbar-default navbar-static-top">
