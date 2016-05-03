@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Discussion;
 use App\Markdown\Markdown;
+use EndaEditor;
 
 use App\Http\Requests;
 
@@ -62,6 +63,13 @@ class PostsController extends Controller
 
     public function destroy()
     {}
+
+    public function upload()
+    {
+        $data = EndaEditor::uploadImgFile('uploads');
+
+        return json_encode($data);        
+    }
 
     public function update(Requests\StoreBlogPostRequest $request, $id)
     {

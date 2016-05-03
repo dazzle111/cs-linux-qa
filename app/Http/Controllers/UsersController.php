@@ -73,10 +73,27 @@ class UsersController extends Controller
         return \Response::json([
         		'success' => true,
         		'avatar' => asset($destinationPath.$filename),
+        		'image'	=> $destinationPath.$filename
         	]);
-
-        	
     }
+
+    public function cropAvatar(Request $request)
+    {
+    	$photo = $request->get('photo');
+    	$width = (int) $request->get('w');
+    	$height = (int) $request->get('h');
+    	$x = (int) $request->get('x');
+    	$y = (int) $request->get('y');
+
+    	Image::make($photo)->crop($width, $height, $x, $y)->save();
+
+    	$user = \Auth::user();
+    	$user->avatar = asset($photo);
+    	$user->save();
+
+    	return redirect('/user/avatar');
+    }
+
     public function logout()
     {
     	\Auth::logout();

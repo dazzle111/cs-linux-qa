@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/font-awesome.css">
     <link rel="stylesheet" href="/css/style.css">
-    <script src="/js/jquery-2.2.3.min.js"></script>
+    <link rel="stylesheet" href="/css/jquery.Jcrop.css">
+    <script src="/js/jquery-2.2.3.min.js"></script>   
+    <script src="/js/jquery.Jcrop.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/jquery.form.js"></script>
 <head>
