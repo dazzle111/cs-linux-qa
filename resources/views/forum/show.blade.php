@@ -59,7 +59,7 @@
                     <ul class="participation__footer__like-list list-inline"> 
       				</ul>
        			<button id="forum-post-like-button" class="Button Button--link btn-self">
-           			 <i class="fa fa-thumbs-o-up">点赞({{count($comment->likes)}})</i>
+           			 <a href="#"><i class="fa fa-thumbs-o-up">点赞({{count($comment->likes)}})</i></a>
         		</button>
              		</li>
              		@else if($comment->status == true)
@@ -67,7 +67,7 @@
                     <ul class="participation__footer__like-list list-inline"> 
       				</ul>
        			<button id="forum-post-like-button" class="Button Button--link btn-self">
-           			 <i class="fa fa-thumbs-o-up">点赞({{count($comment->likes)}})</i>
+           			 <a href="#"><i class="fa fa-thumbs-o-up">点赞({{count($comment->likes)}})</i></a>
         		</button>
              		</li>
 
@@ -79,9 +79,17 @@
                     </li>-->
                     <li class="item-like">
 		       			<button id="forum-post-like-button" class="Button Button--link btn-self">
-		           			 <i class="fa fa-check-square-o">采纳</i>
+		           			 <a href="#"><i class="fa fa-check-square-o">采纳</i></a>
 		        		</button>
              		</li>
+
+             		@if(Auth::check() && Auth::user()->id == $comment->user_id)
+					<li class="item-like">
+						<button id="forum-post-like-button" class="Button Button--link btn-self">
+           					 <a href="/discussion/{{$discussion->id}}/comment/{{$comment->id}}/edit"><i class="fa fa-edit">编辑</i></a>
+        				</button>
+        			</li>
+        			@endif
             	</ul>
             </div>
 			</div>
@@ -117,6 +125,7 @@
 		           			 <i class="fa fa-check-square-o">采纳</i>
 		        		</button>
              		</li>
+             		
             	</ul>
             </div>
             <hr>

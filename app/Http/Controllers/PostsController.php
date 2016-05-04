@@ -86,6 +86,22 @@ class PostsController extends Controller
         return json_encode($data);        
     }
 
+    public function editComment($id,$id1)
+    {   
+        $discussion = $id;
+        $comment = Comment::findOrFail($id1);
+
+        return view('forum.editcomment',compact('comment','discussion'));
+    }
+
+    public function changeComment(Request $request, $id, $id1)
+    {
+        $comment = Comment::findOrFail($id1);
+        $comment->update($request->all());
+
+        return redirect()->action('PostsController@show', ['id' => $id]);        
+    }
+
     public function update(Requests\StoreBlogPostRequest $request, $id)
     {
         $discussion = Discussion::findOrFail($id);

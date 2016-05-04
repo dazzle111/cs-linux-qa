@@ -15,4 +15,20 @@ class CommentsController extends Controller
 
     	return redirect()->action('PostsController@show', ['id' => $request->get('discussion_id')]);
     }
+
+    public function editComment($id,$id1)
+    {   
+        $discussion = $id;
+        $comment = Comment::findOrFail($id1);
+
+        return view('forum.editcomment',compact('comment','discussion'));
+    }
+
+    public function changeComment(Requests\PostCommentRequest $request, $id, $id1)
+    {
+        $comment = Comment::findOrFail($id1);
+        $comment->update($request->all());
+
+        return redirect()->action('PostsController@show', ['id' => $id]);        
+    }
 }
