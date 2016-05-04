@@ -10,10 +10,10 @@ use App\Comment;
 
 class LikesController extends Controller
 {
-    public function likescount($id)
+    public function likes(Request $Request, $id)
     {
-    
+    	Like::create(array_merge($request->get('comment_id'), ['user_id' => \Auth::user()->id]));
+
+    	return redirect()->action('PostsController@show', ['id' => $request->get('discussion_id')]);
     }
-
-
 }

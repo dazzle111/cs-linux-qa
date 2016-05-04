@@ -23,8 +23,9 @@ Route::post('/user/login', 'UsersController@signin');
 Route::get('/user/password', 'UsersController@password');
 Route::post('/user/password', 'UsersController@changePassword');
 Route::get('/user/lost', 'UsersController@lost');
+Route::get('/user/name', 'UsersController@username');
 
-Route::get('/like', 'LikesController@likescount');
+Route::post('/like', 'LikesController@likes');
 
 Route::post('/avatar', 'UsersController@changeAvatar');
 Route::post('/crop/api', 'UsersController@cropAvatar');

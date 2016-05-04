@@ -52,14 +52,26 @@
 			{!! $comment->body !!}
 			</div>
 			<div>
+
             	<ul class="btn-ul">
+          			@if($comment->status == false)
             		<li class="item-like">
                     <ul class="participation__footer__like-list list-inline"> 
       				</ul>
        			<button id="forum-post-like-button" class="Button Button--link btn-self">
-           			 <i class="fa fa-thumbs-o-up">点赞(18)</i>
+           			 <i class="fa fa-thumbs-o-up">点赞({{count($comment->likes)}})</i>
         		</button>
              		</li>
+             		@else if($comment->status == true)
+             		<li class="item-like">
+                    <ul class="participation__footer__like-list list-inline"> 
+      				</ul>
+       			<button id="forum-post-like-button" class="Button Button--link btn-self">
+           			 <i class="fa fa-thumbs-o-up">点赞({{count($comment->likes)}})</i>
+        		</button>
+             		</li>
+
+             		@endif
              		<!--<li class="item-reply">
                         <button class="Button Button--link comment-reply-button btn-self" data-username="snail" type="button" title="回复">
                             <i class="fa fa-reply-all">回复</i>
@@ -187,7 +199,9 @@
     var inputer = $('#content');
     inputer.atwho({
         at: "@",
-        data:['sodasix',]
+        data:"127.0.0.1:8000/user/name",
+        //data:['hello',],
+        limit:7
     });
     inputer.on("inserted.atwho", function($li, query) {
         var token = $('#reply_form').find('input[name="_token"]').val();

@@ -34,16 +34,8 @@ class PostsController extends Controller
         $html = $this->markdown->markdown($discussion->body);
         foreach($discussion->comments as &$comment) {
             $comment->body = $this->markdown->markdown($comment->body);
-        }
-        
-        $comments = $discussion->comments;
 
-        $result = array();
-        $result1 = array();
-        foreach($comments as $comment)
-        {
             $com = Comment::findOrFail($comment->id);
-            $count = count($com->likes);
             $status = null;
             foreach ($com->likes as $like) {
                 if($like->id == \Auth::user()->id)
@@ -51,10 +43,10 @@ class PostsController extends Controller
                 else
                     $status = false;
             }
-            //dd(array('count'=>$count, 'status'=>$status));
-           array_push($result,array('count'=>$count, 'status' => $status));
+            $comment->status = $status;
         }
-    	return view('forum.show',compact('discussion', 'html','result'));
+
+    	return view('forum.show',compact('discussion', 'html'));
     }
 
     public function store(Requests\StoreBlogPostRequest $request)

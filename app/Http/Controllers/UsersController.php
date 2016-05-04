@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\User;
 use App\Http\Requests;
+use DB;
 use Image;
 
 class UsersController extends Controller
@@ -110,11 +111,17 @@ class UsersController extends Controller
     {
         return view('users.lost');
     }
-    
+
 
     public function logout()
     {
     	\Auth::logout();
     	return redirect('/');
+    }
+
+    public function username()
+    {
+        $name = DB::table('users')->select('name')->get();
+        return \Response::json($name);
     }
 }
