@@ -4,19 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Discussion extends Model
+class Like extends Model
 {
-    protected $fillable = ['title','body','user_id','last_user_id'];
-
-    public function user()
+     public function user()
     {
         //默认外键是user_id,如果有其他名字的话，可通过第二个参数传递
         return $this->belongsTo(User::class);   //discussion->user
     }
-
-    public function comments()
+    public function comment()
     {
-        return $this->hasMany(Comment::class);
+    	return $this->belongsTo(Comment::class);
     }
-
 }

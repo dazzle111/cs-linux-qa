@@ -51,8 +51,31 @@
 			</div>
 			{!! $comment->body !!}
 			</div>
+			<div>
+            	<ul class="btn-ul">
+            		<li class="item-like">
+                    <ul class="participation__footer__like-list list-inline"> 
+      				</ul>
+       			<button id="forum-post-like-button" class="Button Button--link btn-self">
+           			 <i class="fa fa-thumbs-o-up">点赞(18)</i>
+        		</button>
+             		</li>
+             		<!--<li class="item-reply">
+                        <button class="Button Button--link comment-reply-button btn-self" data-username="snail" type="button" title="回复">
+                            <i class="fa fa-reply-all">回复</i>
+                        </button>
+                    </li>-->
+                    <li class="item-like">
+		       			<button id="forum-post-like-button" class="Button Button--link btn-self">
+		           			 <i class="fa fa-check-square-o">采纳</i>
+		        		</button>
+             		</li>
+            	</ul>
+            </div>
 			</div>
-            @endforeach
+			            @endforeach
+		
+            <hr>
             <div class="media" v-for="comment in comments">
 			<div class="media-left">
 			<a href="#">
@@ -67,8 +90,26 @@
 			</div>
 			@{{ comment.body }}
 			</div>
-			</div>
+			<div>
+            	<ul class="btn-ul">
+            		<li class="item-like">
+                    <ul class="participation__footer__like-list list-inline"> 
+      				</ul>
+       			<button id="forum-post-like-button" class="Button Button--link btn-self">
+           			 <i class="fa fa-thumbs-o-up"></i>点赞
+        		</button>
+             		</li>
+             		
+                    <li class="item-like">
+		       			<button id="forum-post-like-button" class="Button Button--link btn-self">
+		           			 <i class="fa fa-check-square-o">采纳</i>
+		        		</button>
+             		</li>
+            	</ul>
+            </div>
             <hr>
+			</div>
+         
             @if(Auth::check())
 	        	{!!Form::open(['url' => '/comment','v-on:submit'=>'onSubmitForm'])!!}
 	        	{!! Form::hidden('discussion_id',$discussion->id)!!}

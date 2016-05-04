@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Discussion;
 use App\Markdown\Markdown;
 use EndaEditor;
+use App\Comment;
 
 use App\Http\Requests;
 
@@ -35,7 +36,25 @@ class PostsController extends Controller
             $comment->body = $this->markdown->markdown($comment->body);
         }
         
-    	return view('forum.show',compact('discussion', 'html'));
+        $comments = $discussion->comments;
+
+        $result = array();
+        $result1 = array();
+        foreach($comments as $comment)
+        {
+            $com = Comment::findOrFail($comment->id);
+            $count = count($com->likes);
+            $status = null;
+            foreach ($com->likes as $like) {
+                if($like->id == \Auth::user()->id)
+                    $status = true;
+                else
+                    $status = false;
+            }
+            //dd(array('count'=>$count, 'status'=>$status));
+           array_push($result,array('count'=>$count, 'status' => $status));
+        }
+    	return view('forum.show',compact('discussion', 'html','result'));
     }
 
     public function store(Requests\StoreBlogPostRequest $request)

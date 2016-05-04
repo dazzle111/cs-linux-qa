@@ -19,6 +19,11 @@ class Comment extends Model
     	return $this->belongsTo(Discussion::class);
     }
 
+    public function likes()
+    {
+        return $this->hasMany(like::class);
+    }
+
     public function setCreatedAtAttribute($date)
     {
     	$this->attributes['created_at'] = Carbon::now();

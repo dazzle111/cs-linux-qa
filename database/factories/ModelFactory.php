@@ -42,3 +42,13 @@ $factory->define(App\Comment::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\Like::class, function (Faker\Generator $faker) {
+    $user_ids = \App\User::lists('id')->toArray();
+    $comment_ids = \App\Comment::lists('id')->toArray();
+
+    return [
+        'user_id' => $faker->randomElement($user_ids),
+        'comment_id' => $faker->randomElement($comment_ids),
+    ];
+});
+

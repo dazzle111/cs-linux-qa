@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Laravel App</title>
+    <title>西邮Linux兴趣小组QA平台</title>
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/font-awesome.css">
     <link rel="stylesheet" href="/css/style.css">
@@ -39,7 +39,7 @@
               <li><a id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true">{{Auth::user()->name }}</a>
               <ul class="dropdown-menu" aria-labelledby="dLabel">
                 <li><a href="/user/avatar"> <i class="fa fa-user"></i> 更换头像</a></li>
-                <li><a href="#"> <i class="fa fa-cog"></i> 更换密码</a></li>
+                <li><a href="/user/password"> <i class="fa fa-cog"></i> 更换密码</a></li>
                 <li><a href="#"> <i class="fa fa-heart"></i> 特别感谢</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="/logout"> <i class="fa fa-sign-out"></i>退出登录</a></li>

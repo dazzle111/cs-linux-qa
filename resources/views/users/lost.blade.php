@@ -16,20 +16,18 @@
                         {{Session::get('user_login_failed')}}
                     </div>
                 @endif
-                {!!Form::open(['url' => '/user/login'])!!}
-             
+                {!!Form::open(['url' => '/user/lost'])!!}
+                <div class="form-group">
+                    {!! Form::label('name', '姓名:') !!}
+                    {!! Form::text('text', null,['class' => 'form-control']) !!}
+                </div>
                 <div class="form-group">
                     {!! Form::label('email', '邮箱:') !!}
                     {!! Form::email('email', null, ['class' => 'form-control']) !!}
                 </div>
-                <div class="form-group">
-                    {!! Form::label('password', '密码:') !!}
-                    {!! Form::password('password', ['class' => 'form-control']) !!}
-                </div>
-             
-                {!! Form::submit('登录',['class' => 'btn btn-success form-control']) !!}
+            
+                {!! Form::submit('找回密码',['class' => 'btn btn-success form-control']) !!}
                 {!!Form::close()!!}
-                <div align="center"><a href="/user/lost"><p>忘记密码？</p></a></div>
             </div>
         </div>
     </div>

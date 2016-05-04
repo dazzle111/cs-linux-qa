@@ -93,6 +93,24 @@ class UsersController extends Controller
 
     	return redirect('/user/avatar');
     }
+    public function password()
+    {
+        return view('users.password');
+    }
+
+    public function changePassword(Requests\UserPasswordRequest $request)
+    {
+        $user = User::findOrFail(\Auth::user()->id);
+        $user->password = $request->get('password');
+        $user->save();
+        return redirect('/');
+    }
+
+    public function lost()
+    {
+        return view('users.lost');
+    }
+    
 
     public function logout()
     {

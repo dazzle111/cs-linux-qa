@@ -1,3 +1,18 @@
+hr{
+    clear: both;
+}
+.btn-self{
+    background: #fff;
+    border: none;
+    outline: none;
+}
+.btn-self:hover{
+    color: #5AF580;
+}
+.btn-ul li{
+    list-style: none;
+    float: right;
+}
 .navbar{
     margin-bottom: 0;
     padding: 2em;

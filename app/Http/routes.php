@@ -20,6 +20,12 @@ Route::get('/user/login', 'UsersController@login');
 Route::get('/user/avatar', 'UsersController@avatar');
 Route::post('/user/register', 'UsersController@store');
 Route::post('/user/login', 'UsersController@signin');
+Route::get('/user/password', 'UsersController@password');
+Route::post('/user/password', 'UsersController@changePassword');
+Route::get('/user/lost', 'UsersController@lost');
+
+Route::get('/like', 'LikesController@likescount');
+
 Route::post('/avatar', 'UsersController@changeAvatar');
 Route::post('/crop/api', 'UsersController@cropAvatar');
 Route::post('/post/upload', 'PostsController@upload');
