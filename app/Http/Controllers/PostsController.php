@@ -7,6 +7,7 @@ use App\Discussion;
 use App\Markdown\Markdown;
 use EndaEditor;
 use App\Comment;
+use DB;
 
 use App\Http\Requests;
 
@@ -30,20 +31,36 @@ class PostsController extends Controller
 
     public function show($id)
     {
+
     	$discussion = Discussion::findOrFail($id);
         $html = $this->markdown->markdown($discussion->body);
         foreach($discussion->comments as &$comment) {
             $comment->body = $this->markdown->markdown($comment->body);
+        }
 
-            $com = Comment::findOrFail($comment->id);
-            $status = null;
-            foreach ($com->likes as $like) {
-                if($like->id == \Auth::user()->id)
-                    $status = true;
-                else
-                    $status = false;
+        $status = false;
+        foreach ($discussion->comments as $comment) {
+            # code...
+            if(\Auth::check()) {
+                $com = Comment::findOrFail($comment->id);
+                $status = null;
+                foreach ($com->likes as $like) {
+                    if($like->user_id == \Auth::user()->id)
+                        $status = true;
+                    else
+                        $status = false;
+                }
             }
             $comment->status = $status;
+        }
+
+        $follow = DB::table('follows')->where('discussion_id',$discussion->id)->where('user_id',\Auth::user()->id)->get();
+     
+        if(empty($follow)) {
+            $discussion->follow = 0;
+        }
+        else{
+            $discussion->follow = 1;
         }
 
     	return view('forum.show',compact('discussion', 'html'));
@@ -84,22 +101,6 @@ class PostsController extends Controller
         $data = EndaEditor::uploadImgFile('uploads');
 
         return json_encode($data);        
-    }
-
-    public function editComment($id,$id1)
-    {   
-        $discussion = $id;
-        $comment = Comment::findOrFail($id1);
-
-        return view('forum.editcomment',compact('comment','discussion'));
-    }
-
-    public function changeComment(Request $request, $id, $id1)
-    {
-        $comment = Comment::findOrFail($id1);
-        $comment->update($request->all());
-
-        return redirect()->action('PostsController@show', ['id' => $id]);        
     }
 
     public function update(Requests\StoreBlogPostRequest $request, $id)

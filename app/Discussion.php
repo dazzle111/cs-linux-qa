@@ -19,4 +19,9 @@ class Discussion extends Model
         return $this->hasMany(Comment::class);
     }
 
+     public function follows()
+    {
+        return $this->hasMany(Follow::class);
+    }
+
 }

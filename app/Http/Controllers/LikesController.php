@@ -6,14 +6,32 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Like;
-use App\Comment;
+use DB;
 
 class LikesController extends Controller
 {
-    public function likes(Request $Request, $id)
+    public function likes(Request $request)
     {
-    	Like::create(array_merge($request->get('comment_id'), ['user_id' => \Auth::user()->id]));
+    	$req = explode('_', $request->get('comment_id'));
+    	$comment_id = $req[0];
+    	$user_id = $req[1];
+    	$result = DB::table('likes')->where('comment_id',$comment_id)->where('user_id',$user_id)->get();
+    	if(empty($result))
+    	{
+    		$like = new Like;
+	    	$like->comment_id = $comment_id;
+	    	$like->user_id = $user_id;
 
-    	return redirect()->action('PostsController@show', ['id' => $request->get('discussion_id')]);
+	    	$like->save();
+
+	    	return \Response::json(array('status'=>'thumbs success'));
+    	}
+    	else
+    	{
+    		DB::table('likes')->where('comment_id',$comment_id)->where('user_id',$user_id)->delete();
+    		return \Response::json(array('status' =>'disthumbs success'));
+    	}
+    	
+
     }
 }

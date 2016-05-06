@@ -16,6 +16,7 @@
     <script src="/js/vue-resource.min.js"></script>
     <script src="/js/jquery.atwho.min.js"></script>
     <script src="/js/jquery.caret.min.js"></script>
+    <!--<script src="//cdn.bootcss.com/pusher/3.0.0/pusher.min.js"></script>-->
     <meta id="token" name="token" value="{{ csrf_token()}}">
 <head>
 <body>

@@ -10,7 +10,8 @@
         "illuminate/html":"^5.0",
         "guzzlehttp/guzzle": "~5.3|~6.0",
         "intervention/image": "^2.3",
-        "yuanchao/laravel-5-markdown-editor": "dev-master"
+        "yuanchao/laravel-5-markdown-editor": "dev-master",
+         "predis/predis": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

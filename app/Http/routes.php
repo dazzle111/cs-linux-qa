@@ -13,10 +13,13 @@
 
 Route::get('/', 'PostsController@index');
 Route::resource('discussions','PostsController');
+Route::post('/follow', 'FollowsController@follow');
 Route::get('discussion/{id}/comment/{id1}/edit', 'CommentsController@editComment');
 Route::patch('comments/{id}/comment/{id1}', 'CommentsController@changeComment');
 Route::resource('comment','CommentsController');
 
+Route::post('comment/api/create', 'CommentsController@check');
+Route::post('accept', 'CommentsController@accept');
 
 Route::get('/user/register', 'UsersController@register');
 Route::get('/user/login', 'UsersController@login');
@@ -28,10 +31,11 @@ Route::post('/user/password', 'UsersController@changePassword');
 Route::get('/user/lost', 'UsersController@lost');
 Route::get('/user/name', 'UsersController@username');
 
-Route::post('/like', 'LikesController@likes');
+Route::post('/thumbs', 'LikesController@likes');
 
 Route::post('/avatar', 'UsersController@changeAvatar');
 Route::post('/crop/api', 'UsersController@cropAvatar');
 Route::post('/post/upload', 'PostsController@upload');
 
 Route::get('/logout', 'UsersController@logout');
+

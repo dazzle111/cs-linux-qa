@@ -33,7 +33,13 @@
             		<i class="icon fa fa-fw fa-thumb-tack EventPost-icon"></i>
                     <span class="username">共 {{count($discussion->comments)}} 条回复</span></a>
                     </span>
+                    @if($discussion->follow == 0)
+                      <button class="btn btn-primary pull-right ffollow" id="follow" role="button" style="margin-top: -6px;">关注问题</button>
+                    @elseif($discussion->follow == 1)
+                      <button class="btn btn-primary pull-right disfollow" id="follow" role="button" style="margin-top: -6px;">取消关注</button>
+                     @endif
                 </div>
+
             </div>
             @foreach($discussion->comments as $comment)
             <hr>
@@ -45,9 +51,18 @@
 			</div>
 			<div class="media-body">
 			<div>
-			
 			<span >{{ $comment->user->name}}</span>
 			<time >回复于{{$comment->created_at}}</time>
+			
+			@if($comment->accepted)
+			<span class="Badge Badge--group--4 pull-right" id="change_accept_{{$comment->id}}" style="background: #5fcf80; color:#fff">
+                    <i class="icon fa fa-fw fa-check Badge-icon" data-content="此回复靠谱!题主将它设为答案啦"></i>
+            </span>
+            @else
+            <span class="Badge Badge--group--4 pull-right hidden hideopt" id="change_accept_{{$comment->id}}" style="background: #5fcf80; color:#fff">
+                    <i class="icon fa fa-fw fa-check Badge-icon" data-content="此回复靠谱!题主将它设为答案啦"></i>
+            </span>
+         	@endif
 			</div>
 			{!! $comment->body !!}
 			</div>
@@ -58,30 +73,38 @@
             		<li class="item-like">
                     <ul class="participation__footer__like-list list-inline"> 
       				</ul>
-       			<button id="forum-post-like-button" class="Button Button--link btn-self">
-           			 <a href="#"><i class="fa fa-thumbs-o-up">点赞({{count($comment->likes)}})</i></a>
+       			<button id="forum-post-like-button" class="Button Button--link btn-self btn-fuck ">
+           			 <span><i class="fa fa-thumbs-o-up thumbs" id="{{$comment->id}}_{{\Auth::user()->id}}">点赞({{count($comment->likes)}})</i></span>
         		</button>
              		</li>
-             		@else if($comment->status == true)
-             		<li class="item-like">
-                    <ul class="participation__footer__like-list list-inline"> 
+             		@elseif($comment->status == true)
+             	<li class="item-like">	
+                    <ul class="participation__footer__like-list list-inline">
       				</ul>
-       			<button id="forum-post-like-button" class="Button Button--link btn-self">
-           			 <a href="#"><i class="fa fa-thumbs-o-up">点赞({{count($comment->likes)}})</i></a>
+       			<button id="forum-post-like-button" class="Button Button--link btn-self btn-fuck ">
+           			 <span><i class="fa fa-thumbs-o-down thumbs" id="{{$comment->id}}_{{\Auth::user()->id}}">取消赞({{count($comment->likes)}})</i></span>
         		</button>
              		</li>
-
              		@endif
              		<!--<li class="item-reply">
                         <button class="Button Button--link comment-reply-button btn-self" data-username="snail" type="button" title="回复">
                             <i class="fa fa-reply-all">回复</i>
                         </button>
                     </li>-->
-                    <li class="item-like">
-		       			<button id="forum-post-like-button" class="Button Button--link btn-self">
-		           			 <a href="#"><i class="fa fa-check-square-o">采纳</i></a>
+                    @if($comment->accepted == 0)
+                    <li class="item-like btn-accept">
+		       			<button id="forum-post-like-button btn-accept " class="Button Button--link btn-self btn-fuck">
+		           			 <span><i class="fa fa-check-square-o accept opttype"  id="accept_{{$comment->id}}">采纳</i></span>
 		        		</button>
              		</li>
+
+             		@else
+             		 <li class="item-like btn-cancel">
+		       			<button id="forum-post-like-button" class="Button Button--link btn-self btn-fuck">
+		           			 <span><i class="fa fa-times cancel opttype"  id="accept_{{$comment->id}}">取消</i></span>
+		        		</button>
+             		</li>
+             		@endif
 
              		@if(Auth::check() && Auth::user()->id == $comment->user_id)
 					<li class="item-like">
@@ -93,8 +116,8 @@
             	</ul>
             </div>
 			</div>
-			            @endforeach
-		
+			@endforeach
+			
             <hr>
             <div class="media" v-for="comment in comments">
 			<div class="media-left">
@@ -130,7 +153,7 @@
             </div>
             <hr>
 			</div>
-         
+         	
             @if(Auth::check())
 	        	{!!Form::open(['url' => '/comment','v-on:submit'=>'onSubmitForm'])!!}
 	        	{!! Form::hidden('discussion_id',$discussion->id)!!}
@@ -156,7 +179,7 @@
 	    "d+" : this.getDate(),                    //日   
 	    "h+" : this.getHours(),                   //小时   
 	    "m+" : this.getMinutes(),                 //分   
-	    "s+" : this.getSeconds(),                 //秒   
+	    "s+" : this.getSeconds()+4,                 //秒   
 	    "q+" : Math.floor((this.getMonth()+3)/3), //季度   
 	    "S"  : this.getMilliseconds()             //毫秒   
 	  };   
@@ -208,7 +231,8 @@
     var inputer = $('#content');
     inputer.atwho({
         at: "@",
-        data:"127.0.0.1:8000/user/name",
+        data:"http://localhost:8000/user/name",
+        displayTpl:"<li> ${name} </li>",
         //data:['hello',],
         limit:7
     });
@@ -224,8 +248,7 @@
                 "/comment/api/create",data,function(response){
                     if(response.status === 'success'){
                     }
-                },
-                "json");
+                },"json");
 
     });
     inputer.keydown(function (event) {
@@ -234,13 +257,90 @@
         }
     });
 </script>
-<div class="atwho-container">
-	<div id="atwho-ground-content">
-		<div class="atwho-view" id="at-view-64" style="display: none; top: 1483px; left: 159.015px;">
-			<ul class="atwho-view-ul">
-				<li class="cur">sodasix</li>
-			</ul>
-		</div>
-	</div>
-</div>
+
+<script>
+	
+	$(document).ready(function(){	
+		var flag=3;
+		var token = document.querySelector('#token').getAttribute('value');
+
+    $('.opttype').click(function(){
+    	
+    	if($("#"+this.id).hasClass("fa-check-square-o"))
+    	{
+    		
+    		$("#"+this.id).removeClass("fa-check-square-o");
+    		$("#"+this.id).text('取消');
+    		$("#"+this.id).addClass("fa-times");
+    		$("#"+"change_"+this.id).removeClass("hidden");
+    	}
+    	else if($("#"+this.id).hasClass("fa-times"))
+    	{
+    		
+    		$("#"+this.id).removeClass("fa-times");
+    		$("#"+this.id).text("采纳");
+    		$("#"+this.id).addClass("fa-check-square-o");
+    		$("#"+"change_"+this.id).addClass("hidden");
+    	}
+        $.ajax({
+             type: "post",
+             url: "/accept",
+             data: {comment_id:this.id,discussion_id:{{$discussion->id}},_token:token},
+             dataType: "json",
+             success: function(data){      
+                    console.log(data);
+             	}
+         });
+    });
+
+    $('.thumbs').click(function(){
+    	var id = $("#"+this.id).text();
+    	var start = id.indexOf("(");
+    	var end = id.indexOf(")");
+    	var count = id.substr(start+1,end-start-1);
+    	
+     	if($("#"+this.id).hasClass("fa-thumbs-o-up")){
+    		$("#"+this.id).removeClass("fa-thumbs-o-up");
+    		$("#"+this.id).text('取消赞'+'('+(parseInt(count)+1)+')');
+    		$("#"+this.id).addClass("fa-thumbs-o-down");
+    	}
+    	else if($("#"+this.id).hasClass("fa-thumbs-o-down"))
+    	{
+    		$("#"+this.id).removeClass("fa-thumbs-o-down");
+    		$("#"+this.id).text('点赞'+'('+(parseInt(count)-1)+')');
+    		$("#"+this.id).addClass("fa-thumbs-o-up");
+    	}
+
+         $.ajax({
+             type: "post",
+             url: "/thumbs",
+             data: {comment_id:this.id,_token:token},
+             dataType: "json",
+             success: function(data){
+                         console.log(data);
+             }
+         });
+    });
+
+    $('#follow').click(function(){
+    	 if(flag % 2 ==1){
+ 		 	$('#follow').text("取消关注");
+ 		 } else if(flag % 2 == 0) {
+ 		 	$('#follow').text("关注问题");
+ 		 }
+ 		flag = flag + 1;
+         $.ajax({
+             type: "post",
+             url: "/follow",
+             data: {discussion_id:{{$discussion->id}},user_id:{{\Auth::user()->id}}, _token:token},
+             dataType: "json",
+             success: function(data){
+                         console.log(data);
+             }
+         });
+    });
+
+	});
+</script>
+
 @stop

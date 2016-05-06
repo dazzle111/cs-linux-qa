@@ -29,6 +29,13 @@ class User extends Authenticatable
         return $this->hasMany(Discussion::class);   //$user->discussions
     }
 
+
+    public function follows()
+    {
+        return $this->hasMany(Follow::class);   //$user->discussions
+    }
+
+
     public function comments()
     {
         return $this->hasMany(Comment::class);

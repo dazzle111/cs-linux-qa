@@ -1,5 +1,11 @@
+.blog-post img{
+    max-width: 100%;
+}
 hr{
     clear: both;
+}
+.btn-fuck{
+    color:#337ab7;
 }
 .btn-self{
     background: #fff;
@@ -59,6 +65,9 @@ hr{
     margin-bottom: -1px;
 }.media-body a{
     color: #4b4b4b;
+ }
+ .media-body a.btn-primary{
+    color:#fff;
  }
 
  #avatar .avatar{

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCommentsTable extends Migration
+class CreateFollowsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,10 @@ class CreateCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
+      Schema::create('follows', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('body');
             $table->integer('user_id')->unsigned();
             $table->integer('discussion_id')->unsigned();
-            $table->integer('accepted')->unsigned()->default(0);
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
@@ -37,6 +35,6 @@ class CreateCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('comments');
+         Schema::drop('follows');
     }
 }
