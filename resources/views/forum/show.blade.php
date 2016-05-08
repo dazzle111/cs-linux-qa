@@ -15,7 +15,10 @@
 					<a class="btn btn-primary btn-lg pull-right" href="/discussions/{{$discussion->id}}/edit" role="button">修改帖子</a>
 					@endif
 				</h4>
-				<h5 class="blog-post-meta">{{ $discussion->user->name }}<a href="#">发表于{{$discussion->created_at->diffForHumans()}}</a></h5>
+				<h5 class="blog-post-meta">{{ $discussion->user->name }}
+					<a href="#">发表于{{$discussion->created_at->diffForHumans()}}</a>
+					<i class="icon-top" alt="置顶" title="置顶">置顶</i>
+				</h5>
 				
 				</div>
 			</div>
@@ -42,6 +45,7 @@
 
             </div>
             @foreach($discussion->comments as $comment)
+
             <hr>
             <div class="media">
 			<div class="media-left">
@@ -66,8 +70,8 @@
 			</div>
 			{!! $comment->body !!}
 			</div>
+			@if(Auth::check())
 			<div>
-
             	<ul class="btn-ul">
           			@if($comment->status == false)
             		<li class="item-like">
@@ -91,21 +95,22 @@
                             <i class="fa fa-reply-all">回复</i>
                         </button>
                     </li>-->
-                    @if($comment->accepted == 0)
-                    <li class="item-like btn-accept">
-		       			<button id="forum-post-like-button btn-accept " class="Button Button--link btn-self btn-fuck">
-		           			 <span><i class="fa fa-check-square-o accept opttype"  id="accept_{{$comment->id}}">采纳</i></span>
-		        		</button>
-             		</li>
+                    @if(Auth::user()->id == $discussion->user->id)
+	                    @if($comment->accepted == 0)
+	                    <li class="item-like btn-accept">
+			       			<button id="forum-post-like-button btn-accept " class="Button Button--link btn-self btn-fuck">
+			           			 <span><i class="fa fa-check-square-o accept opttype"  id="accept_{{$comment->id}}">采纳</i></span>
+			        		</button>
+	             		</li>
 
-             		@else
-             		 <li class="item-like btn-cancel">
-		       			<button id="forum-post-like-button" class="Button Button--link btn-self btn-fuck">
-		           			 <span><i class="fa fa-times cancel opttype"  id="accept_{{$comment->id}}">取消</i></span>
-		        		</button>
-             		</li>
+	             		@else
+	             		 <li class="item-like btn-cancel">
+			       			<button id="forum-post-like-button" class="Button Button--link btn-self btn-fuck">
+			           			 <span><i class="fa fa-times cancel opttype"  id="accept_{{$comment->id}}">取消</i></span>
+			        		</button>
+	             		</li>
+	             		@endif
              		@endif
-
              		@if(Auth::check() && Auth::user()->id == $comment->user_id)
 					<li class="item-like">
 						<button id="forum-post-like-button" class="Button Button--link btn-self">
@@ -115,6 +120,7 @@
         			@endif
             	</ul>
             </div>
+            @endif
 			</div>
 			@endforeach
 			
@@ -135,20 +141,25 @@
 			</div>
 			<div>
             	<ul class="btn-ul">
+
             		<li class="item-like">
                     <ul class="participation__footer__like-list list-inline"> 
       				</ul>
-       			<button id="forum-post-like-button" class="Button Button--link btn-self">
-           			 <i class="fa fa-thumbs-o-up"></i>点赞
+       			<button id="forum-post-like-button" class="Button Button--link btn-self btn-fuck">
+           			 <i class="fa fa-thumbs-o-up"></i>点赞(0)
         		</button>
              		</li>
              		
                     <li class="item-like">
-		       			<button id="forum-post-like-button" class="Button Button--link btn-self">
+		       			<button id="forum-post-like-button" class="Button Button--link btn-self btn-fuck">
 		           			 <i class="fa fa-check-square-o">采纳</i>
 		        		</button>
              		</li>
-             		
+             		<li class="item-like">
+						<button id="forum-post-like-button" class="Button Button--link btn-self">
+           					 <a href=""><i class="fa fa-edit">编辑</i></a>
+        				</button>
+        			</li>
             	</ul>
             </div>
             <hr>
@@ -172,6 +183,7 @@
 	</div>
 </div>
 <script>
+
 	Date.prototype.Format = function(fmt)   
 	{ //author: meizz   
 	  var o = {   
@@ -179,7 +191,7 @@
 	    "d+" : this.getDate(),                    //日   
 	    "h+" : this.getHours(),                   //小时   
 	    "m+" : this.getMinutes(),                 //分   
-	    "s+" : this.getSeconds()+4,                 //秒   
+	    "s+" : this.getSeconds()+2,                 //秒   
 	    "q+" : Math.floor((this.getMonth()+3)/3), //季度   
 	    "S"  : this.getMilliseconds()             //毫秒   
 	  };   
@@ -193,6 +205,8 @@
 
 	var time1 = new Date().Format("yyyy-MM-dd hh:mm:ss");
 	Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('value');
+	var dis = {{Auth::user()->id}};
+	if(typeof(dis) !== "undefined"){
 	new Vue({
 		el:'#post',
 		data:{
@@ -226,6 +240,8 @@
 			}
 		}
 	})
+}
+	
 </script>
 <script type="text/javascript">
     var inputer = $('#content');

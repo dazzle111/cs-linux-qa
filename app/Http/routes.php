@@ -12,12 +12,17 @@
 */
 
 Route::get('/', 'PostsController@index');
+Route::get('discussions/search','PostsController@search');
+Route::get('discussions/manage','PostsController@manage');
+Route::post('discussions/top', 'PostsController@top');
 Route::resource('discussions','PostsController');
-Route::post('/follow', 'FollowsController@follow');
+
+
 Route::get('discussion/{id}/comment/{id1}/edit', 'CommentsController@editComment');
+
 Route::patch('comments/{id}/comment/{id1}', 'CommentsController@changeComment');
 Route::resource('comment','CommentsController');
-
+Route::post('/follow', 'FollowsController@follow');
 Route::post('comment/api/create', 'CommentsController@check');
 Route::post('accept', 'CommentsController@accept');
 

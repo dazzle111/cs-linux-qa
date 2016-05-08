@@ -82,3 +82,34 @@ hr{
      margin-top: 30px;
      z-index: 3;
  }
+ #search_inf{
+    width:200%;
+ }
+ #bt_search{
+    background-color: #f8f8f8;
+ }
+ .table-striped>tbody>tr:nth-of-type(odd){
+
+ }
+ #manage-search{
+    margin-right: 50px;
+    margin-top: 15px;
+ }
+ .manage_search_tips{
+    text-align: center;
+ }
+ .click-back{
+    padding: 10px 24px;
+    font-size: 21px;
+    margin-left: 300px;
+    width:300px;
+ }
+ #title{
+    width:95.5%;
+ }
+ .icon-top{
+    font-size: 14px;
+    background-color: #dc4349;
+    color:#fff;
+    font-style: inherit;
+ }

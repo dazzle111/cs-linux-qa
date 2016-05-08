@@ -35,12 +35,28 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="/">首页</a></li>
           </ul>
+          <div class="col-md-8">
+          <form class="navbar-form navbar-left input-s-box m-t m-l-n-xs hidden-xs" role="search" action="/discussions/search" method="get">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                          <button type="submit" id="bt_search" class="btn btn-sm bg-white btn-icon rounded"><i class="fa fa-search"></i></button>
+                        </span>
+                        <input name="content" type="text" id="search_inf" class="form-control input-sm no-border rounded" placeholder="搜索相关问题...">
+                    </div>
+                </div>
+            </form>
+          </div>
           <ul class="nav navbar-nav navbar-right">
             @if(Auth::check())
               <li><a id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true">{{Auth::user()->name }}</a>
               <ul class="dropdown-menu" aria-labelledby="dLabel">
                 <li><a href="/user/avatar"> <i class="fa fa-user"></i> 更换头像</a></li>
                 <li><a href="/user/password"> <i class="fa fa-cog"></i> 更换密码</a></li>
+                @if(Auth::user()->permission == 1)
+                  <li><a href="/discussions/manage"> <i class="fa fa-file-text"></i> 管理帖子</a></li>
+                @endif
+                <li><a href="#"> <i class="fa fa-envelope"></i> 消息通知<span class="badge bg-danger" id="newmessage" style="background:#f05050">1</span></a></li>
                 <li><a href="#"> <i class="fa fa-heart"></i> 特别感谢</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="/logout"> <i class="fa fa-sign-out"></i>退出登录</a></li>

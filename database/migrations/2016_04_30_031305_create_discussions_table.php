@@ -18,6 +18,7 @@ class CreateDiscussionsTable extends Migration
             $table->text('body');   //body
             $table->integer('user_id')->unsigned();     //user外键
             $table->integer('last_user_id')->unsigned();    //最后更新id
+            $table->integer('is_top')->unsigned()->default(0);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');     //指明外键
             $table->timestamps();
         });

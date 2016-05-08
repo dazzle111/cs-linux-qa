@@ -19,7 +19,14 @@
 			</a>
 			</div>
 			<div class="media-body">
-			<h4 class="media-heading"><a href="/discussions/{{ $discussion->id }}">{{ $discussion->title }}</a></h4>
+			<h4 class="media-heading">
+				@if($discussion->is_top == 1)
+				<a href="/discussions/{{ $discussion->id }}" style="">{{ $discussion->title }}</a>
+				<i class="icon-top" alt="置顶" title="置顶">置顶</i>
+				@else
+				<a href="/discussions/{{ $discussion->id }}">{{ $discussion->title }}</a>
+				@endif
+			</h4>
 			
 			<div class="media-conversation-meta">
 			<span class="media-conversation-replies">

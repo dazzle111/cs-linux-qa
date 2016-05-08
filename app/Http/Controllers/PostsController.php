@@ -7,6 +7,7 @@ use App\Discussion;
 use App\Markdown\Markdown;
 use EndaEditor;
 use App\Comment;
+use App\User;
 use DB;
 
 use App\Http\Requests;
@@ -25,7 +26,7 @@ class PostsController extends Controller
 	}
     public function index()
     {
-    	$discussions = Discussion::latest()->paginate(10);
+    	$discussions = Discussion::orderBy('is_top','desc')->latest()->paginate(10);
         return view('forum.index',compact('discussions'));
     }
 
@@ -38,31 +39,32 @@ class PostsController extends Controller
             $comment->body = $this->markdown->markdown($comment->body);
         }
 
-        $status = false;
-        foreach ($discussion->comments as $comment) {
-            # code...
-            if(\Auth::check()) {
-                $com = Comment::findOrFail($comment->id);
-                $status = null;
-                foreach ($com->likes as $like) {
-                    if($like->user_id == \Auth::user()->id)
-                        $status = true;
-                    else
-                        $status = false;
+        if(\Auth::check()){
+            $status = false;
+            foreach ($discussion->comments as $comment) {
+                # code...
+                if(\Auth::check()) {
+                    $com = Comment::findOrFail($comment->id);
+                    $status = null;
+                    foreach ($com->likes as $like) {
+                        if($like->user_id == \Auth::user()->id)
+                            $status = true;
+                        else
+                            $status = false;
+                    }
                 }
+                $comment->status = $status;
             }
-            $comment->status = $status;
-        }
 
-        $follow = DB::table('follows')->where('discussion_id',$discussion->id)->where('user_id',\Auth::user()->id)->get();
-     
-        if(empty($follow)) {
-            $discussion->follow = 0;
+            $follow = DB::table('follows')->where('discussion_id',$discussion->id)->where('user_id',\Auth::user()->id)->get();
+         
+            if(empty($follow)) {
+                $discussion->follow = 0;
+            }
+            else{
+                $discussion->follow = 1;
+            }
         }
-        else{
-            $discussion->follow = 1;
-        }
-
     	return view('forum.show',compact('discussion', 'html'));
     }
 
@@ -93,8 +95,25 @@ class PostsController extends Controller
         return view('forum.edit', compact('discussion'));      
     }
 
-    public function destroy()
-    {}
+    public function destroy(Request $request)
+    {
+
+        $user_id = $request->get('user_id');
+        $discussion_id = $request->get('discussion_id');
+        $user = User::find($user_id);
+
+        if($user->permission == 1){
+             $discussion =  Discussion::findOrFail($discussion_id);
+             $discussion->delete();
+
+             return \Response::json(array('status'=>'success'));
+        }
+        else 
+        {
+            return \Response::json(array('stutas'=>'failed'));
+        }
+       
+    }   
 
     public function upload()
     {
@@ -110,4 +129,32 @@ class PostsController extends Controller
 
         return redirect()->action('PostsController@show', ['id'=>$discussion->id]);
     }
+
+    public function search(Request $request)
+    {
+        $content = $request->get('content');
+        $discussions = Discussion::where('title','like','%'.$content.'%')->orWhere('body','like','%'.$content.'%')->latest()->paginate(10);
+
+        return view('forum.search',['discussions'=>$discussions]);
+    }
+
+    public function manage(Request $request)
+    {
+
+        $content = $request->get('content');
+        $discussions = Discussion::where('title','like','%'.$content.'%')->latest()->paginate(10);
+        return view('forum.manage',['discussions'=>$discussions]);
+    }
+
+    public function top(Request $request) 
+    {
+        $discussion_id = $request->get('discussion_id');
+
+        $discussion = Discussion::findOrFail($discussion_id);
+        $discussion->is_top = 1;
+        $discussion->save();
+
+        return \Response::json(array("status" => "success"));
+    }
+
 }
