@@ -50,5 +50,8 @@
 </div>
 <div class="col-md-8 pull-right">
 <?php echo $discussions->render();?>
+<div class="bottom">
+	</dvi>
 </div>
+
 @stop

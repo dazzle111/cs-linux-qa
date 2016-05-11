@@ -113,3 +113,21 @@ hr{
     color:#fff;
     font-style: inherit;
  }
+
+ .btn-notification{
+    margin-top: 45px;
+ }
+
+ .btn-notification .btn{
+    background-color: #fff;
+ }
+ .a-list{
+    color:#222;
+ }
+ .bottom{
+    margin-bottom: 100px;
+ }
+ .new{
+    color:#dc4349;
+    font-family: "Candara";
+ }

@@ -3,7 +3,7 @@
 @section('content')
 <div class="text-center">
         <div id="validation-errors"></div>
-        <img src="{{Auth::user()->avatar}}" width="120" class="img-circle" id="user-avatar" alt="">
+        <img src="{{Auth::user()->avatar}}" width="120px" height="120px" class="img-circle" style="margin-top:20px" id="user-avatar" alt="">
         {!! Form::open(['url'=>'/avatar','files'=>true,'id'=>'avatar']) !!}
         <div class="text-center">
             <button type="button" class="btn btn-success avatar-button" id="upload-avatar">上传新的头像</button>

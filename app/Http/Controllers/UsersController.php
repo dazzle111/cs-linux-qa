@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Libraries\Notification;
 
 use App\User;
 use App\Http\Requests;
@@ -11,6 +12,11 @@ use Image;
 
 class UsersController extends Controller
 {
+    protected $notification;
+    public function __construct(Notification $notification)
+    {
+        $this->notification = $notification;
+    }
     public function register()
     {
         return view('users.register');
@@ -25,6 +31,8 @@ class UsersController extends Controller
 
     public function login()
     {
+        if(\Auth::check())
+            return redirect()->action('PostsController@index');
     	return view('users.login');
     }
 
@@ -43,7 +51,8 @@ class UsersController extends Controller
 
     public function avatar()
     {
-    	return view('users.avatar');
+        $notifys = $this->notification->GetUserNotifyUnread(\Auth::user()->id);
+    	return view('users.avatar',compact('notifys'));
     }
 
     public function changeAvatar(Request $request)

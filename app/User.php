@@ -46,6 +46,16 @@ class User extends Authenticatable
         return $this->hasMany(Like::class);
     }
 
+     public function notifys()
+    {
+        return $this->hasMany(Notify::class);
+    }
+
+     public function usernotifys()
+    {
+        return $this->hasMany(UserNotify::class);
+    }
+
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = \Hash::make($password);

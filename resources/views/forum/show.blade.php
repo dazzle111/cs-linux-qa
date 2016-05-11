@@ -6,7 +6,7 @@
       		<div class="media">
 				<div class="media-left">
 				<a href="#">
-					<img class="media=object img-circle" alt="64*64" src="{{ $discussion->user->avatar }}" width="64px" height="64px">
+					<img class="media-object img-circle" alt="64*64" src="{{ $discussion->user->avatar }}" width="64px" height="64px">
 				</a>
 				</div>
 				<div class="media-body">
@@ -17,7 +17,9 @@
 				</h4>
 				<h5 class="blog-post-meta">{{ $discussion->user->name }}
 					<a href="#">发表于{{$discussion->created_at->diffForHumans()}}</a>
+					@if($discussion->is_top == 1)
 					<i class="icon-top" alt="置顶" title="置顶">置顶</i>
+					@endif
 				</h5>
 				
 				</div>
@@ -37,9 +39,9 @@
                     <span class="username">共 {{count($discussion->comments)}} 条回复</span></a>
                     </span>
                     @if($discussion->follow == 0)
-                      <button class="btn btn-primary pull-right ffollow" id="follow" role="button" style="margin-top: -6px;">关注问题</button>
+                      <button class="btn btn-primary pull-right follow a" id="followq" role="button" style="margin-top: -6px;">关注问题</button>
                     @elseif($discussion->follow == 1)
-                      <button class="btn btn-primary pull-right disfollow" id="follow" role="button" style="margin-top: -6px;">取消关注</button>
+                      <button class="btn btn-primary pull-right follow b" id="disfollowq" role="button" style="margin-top: -6px;">取消关注</button>
                      @endif
                 </div>
 
@@ -60,6 +62,7 @@
 			
 			@if($comment->accepted)
 			<span class="Badge Badge--group--4 pull-right" id="change_accept_{{$comment->id}}" style="background: #5fcf80; color:#fff">
+                    <i >已采纳</i>
                     <i class="icon fa fa-fw fa-check Badge-icon" data-content="此回复靠谱!题主将它设为答案啦"></i>
             </span>
             @else
@@ -182,8 +185,10 @@
 		</div>
 	</div>
 </div>
+<div class="bottom">
+</div>
 <script>
-
+	
 	Date.prototype.Format = function(fmt)   
 	{ //author: meizz   
 	  var o = {   
@@ -205,42 +210,41 @@
 
 	var time1 = new Date().Format("yyyy-MM-dd hh:mm:ss");
 	Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('value');
-	var dis = {{Auth::user()->id}};
-	if(typeof(dis) !== "undefined"){
-	new Vue({
-		el:'#post',
-		data:{
-			comments:[],
-			newComment:{
-				name:'{{Auth::user()->name}}',
-				avatar:'{{Auth::user()->avatar}}',
-				created_at:time1,
-				body:''
-			},
-			newPost:{
-				discussion_id:'{{$discussion->id}}',
-				user_id:'{{Auth::user()->id}}',
-				body:''
-			}
-		},
-		methods:{
-			onSubmitForm:function(e){
-				e.preventDefault();
-				var comment = this.newComment;
-				var post = this.newPost;
-				post.body = comment.body;
-				this.$http.post('/comment',post,function(){
-					this.comments.push(comment);
-				});
-				this.newComment = {
-					name:'{{Auth::user()->name}}',
-					avatar:'{{Auth::user()->avatar}}',
+
+		new Vue({
+			el:'#post',
+			data:{
+				comments:[],
+				newComment:{
+					name:'{{$user->name}}',
+					avatar:'{{$user->avatar}}',
+					created_at:time1,
 					body:''
-				};
+				},
+				newPost:{
+					discussion_id:'{{$discussion->id}}',
+					user_id:'{{$user->id}}',
+					body:''
+				}
+			},
+			methods:{
+				onSubmitForm:function(e){
+					e.preventDefault();
+					var comment = this.newComment;
+					var post = this.newPost;
+					post.body = comment.body;
+					this.$http.post('/comment',post,function(){
+						this.comments.push(comment);
+					});
+					this.newComment = {
+						name:'{{$user->name}}',
+						avatar:'{{$user->avatar}}',
+						body:''
+					};
+				}
 			}
-		}
-	})
-}
+		})
+	
 	
 </script>
 <script type="text/javascript">
@@ -277,36 +281,46 @@
 <script>
 	
 	$(document).ready(function(){	
-		var flag=3;
-		var token = document.querySelector('#token').getAttribute('value');
+	var token = document.querySelector('#token').getAttribute('value');
 
     $('.opttype').click(function(){
-    	
-    	if($("#"+this.id).hasClass("fa-check-square-o"))
-    	{
-    		
-    		$("#"+this.id).removeClass("fa-check-square-o");
-    		$("#"+this.id).text('取消');
-    		$("#"+this.id).addClass("fa-times");
-    		$("#"+"change_"+this.id).removeClass("hidden");
-    	}
-    	else if($("#"+this.id).hasClass("fa-times"))
-    	{
-    		
-    		$("#"+this.id).removeClass("fa-times");
-    		$("#"+this.id).text("采纳");
-    		$("#"+this.id).addClass("fa-check-square-o");
-    		$("#"+"change_"+this.id).addClass("hidden");
-    	}
+        var tips='';
+        if($("#"+this.id).hasClass("fa-check-square-o")){
+            tips = "确认采纳?"
+        }
+        else
+        {
+            tips="取消采纳？"
+        }
+    	var accept = confirm(tips);
+    	if(accept) {
+	    	if($("#"+this.id).hasClass("fa-check-square-o"))
+	    	{
+	    		
+	    		$("#"+this.id).removeClass("fa-check-square-o");
+	    		$("#"+this.id).text('取消');
+	    		$("#"+this.id).addClass("fa-times");
+	    		$("#"+"change_"+this.id).removeClass("hidden");
+	    	}
+	    	else if($("#"+this.id).hasClass("fa-times"))
+	    	{
+	    		
+	    		$("#"+this.id).removeClass("fa-times");
+	    		$("#"+this.id).text("采纳");
+	    		$("#"+this.id).addClass("fa-check-square-o");
+	    		$("#"+"change_"+this.id).addClass("hidden");
+	    	}
         $.ajax({
              type: "post",
              url: "/accept",
              data: {comment_id:this.id,discussion_id:{{$discussion->id}},_token:token},
              dataType: "json",
              success: function(data){      
-                    console.log(data);
-             	}
+             	window.location.reload();
+             }
          });
+    	}
+    	
     });
 
     $('.thumbs').click(function(){
@@ -338,17 +352,17 @@
          });
     });
 
-    $('#follow').click(function(){
-    	 if(flag % 2 ==1){
- 		 	$('#follow').text("取消关注");
- 		 } else if(flag % 2 == 0) {
- 		 	$('#follow').text("关注问题");
+    $('.follow').click(function(){
+
+    	 if($("#"+this.id).hasClass('a')){
+ 		 	$('#'+this.id).text("取消关注");
+ 		 } else if($("#"+this.id).hasClass('b')) {
+ 		 	$('#'+this.id).text("关注问题");
  		 }
- 		flag = flag + 1;
          $.ajax({
              type: "post",
              url: "/follow",
-             data: {discussion_id:{{$discussion->id}},user_id:{{\Auth::user()->id}}, _token:token},
+             data: {discussion_id:{{$discussion->id}},user_id:{{$user->id}}, _token:token},
              dataType: "json",
              success: function(data){
                          console.log(data);

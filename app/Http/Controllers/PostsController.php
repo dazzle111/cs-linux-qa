@@ -7,6 +7,7 @@ use App\Discussion;
 use App\Markdown\Markdown;
 use EndaEditor;
 use App\Comment;
+use App\Libraries\Notification;
 use App\User;
 use DB;
 
@@ -16,18 +17,26 @@ class PostsController extends Controller
 {
 
     protected $markdown;
+    protected $notification;
 
-	public function __construct(Markdown $markdown) 
+	public function __construct(Markdown $markdown, Notification $notification) 
 	{
+        $this->notification = $notification;
 		$this->middleware('auth',['only' => ['create', 'store', 'edit', 'update']]);
 
         $this->markdown = $markdown;
 
 	}
+    
     public function index()
     {
     	$discussions = Discussion::orderBy('is_top','desc')->latest()->paginate(10);
-        return view('forum.index',compact('discussions'));
+        $notifys = '';
+        if(\Auth::check()){
+            $notifys = $this->notification->GetUserNotifyUnread(\Auth::user()->id);
+        }
+
+        return view('forum.index',compact('discussions','notifys'));
     }
 
     public function show($id)
@@ -35,6 +44,7 @@ class PostsController extends Controller
 
     	$discussion = Discussion::findOrFail($id);
         $html = $this->markdown->markdown($discussion->body);
+        $notifys = "";
         foreach($discussion->comments as &$comment) {
             $comment->body = $this->markdown->markdown($comment->body);
         }
@@ -64,8 +74,17 @@ class PostsController extends Controller
             else{
                 $discussion->follow = 1;
             }
+
+            $notifys = $this->notification->GetUserNotifyUnread(\Auth::user()->id);
+            $user = \Auth::user();
         }
-    	return view('forum.show',compact('discussion', 'html'));
+        else {
+            $user = new User;
+            $user->name = "游客";
+            $user->id = "0";
+            $user->avatar = "default-avatar.jpg";
+        }
+    	return view('forum.show',compact('discussion', 'html','notifys','user'));
     }
 
     public function store(Requests\StoreBlogPostRequest $request)
@@ -82,7 +101,8 @@ class PostsController extends Controller
 
     public function create()
     {
-    	return view('forum.create');
+         $notifys = $this->notification->GetUserNotifyUnread(\Auth::user()->id);
+    	return view('forum.create',compact('notifys'));
     }
 
     public function edit($id) {
@@ -143,7 +163,8 @@ class PostsController extends Controller
 
         $content = $request->get('content');
         $discussions = Discussion::where('title','like','%'.$content.'%')->latest()->paginate(10);
-        return view('forum.manage',['discussions'=>$discussions]);
+        $notifys = $this->notification->GetUserNotifyUnread(\Auth::user()->id);
+        return view('forum.manage',compact('discussions','notifys'));
     }
 
     public function top(Request $request) 
@@ -154,7 +175,12 @@ class PostsController extends Controller
         $discussion->is_top = 1;
         $discussion->save();
 
+        $this->notification->WrapperNotify($target_id = $discussion_id, $target_type = 'discussion', $action = 'top', $sender_id = \Auth::user()->id, "", 1);
         return \Response::json(array("status" => "success"));
     }
-
+    
+    public function test()
+    {
+        $this->notification->test();
+    }
 }

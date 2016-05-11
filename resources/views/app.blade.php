@@ -56,13 +56,18 @@
                 @if(Auth::user()->permission == 1)
                   <li><a href="/discussions/manage"> <i class="fa fa-file-text"></i> 管理帖子</a></li>
                 @endif
-                <li><a href="#"> <i class="fa fa-envelope"></i> 消息通知<span class="badge bg-danger" id="newmessage" style="background:#f05050">1</span></a></li>
+                <li><a href="/notification?flag=new"> 
+                  <i class="fa fa-envelope"></i> 消息通知
+                  @if(count($notifys) !== 0)
+                  <span class="badge bg-danger" id="newmessage" style="background:#f05050">{{count($notifys)}}</span>
+                  @endif
+                </a></li>
                 <li><a href="#"> <i class="fa fa-heart"></i> 特别感谢</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="/logout"> <i class="fa fa-sign-out"></i>退出登录</a></li>
+                <li><a href="/logout"> <i class="fa fa-sign-out"></i> 退出登录</a></li>
               </ul>
             </li>
-              <li><img src="{{Auth::user()->avatar}}" class="img-circle" width="50" alt="">
+              <li><img src="{{Auth::user()->avatar}}" class="img-circle "  alt="" width="48px" height="48px">
             @else
             <li><a href="/user/login">登录</a></li>
             <li><a href="/user/register">注册</a></li>
@@ -74,5 +79,6 @@
 @yield('content')
 <!--<script src="//cdn.bootcss.com/jquery/3.0.0-alpha1/jquery.min.js"></script>-->
 <!--<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>-->
+
 </body>
 </html>

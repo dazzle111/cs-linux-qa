@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'PostsController@index');
+Route::get('/test', 'PostsController@test');
 Route::get('discussions/search','PostsController@search');
 Route::get('discussions/manage','PostsController@manage');
 Route::post('discussions/top', 'PostsController@top');
@@ -41,6 +42,9 @@ Route::post('/thumbs', 'LikesController@likes');
 Route::post('/avatar', 'UsersController@changeAvatar');
 Route::post('/crop/api', 'UsersController@cropAvatar');
 Route::post('/post/upload', 'PostsController@upload');
+
+Route::get('notification', 'NotificationController@index');
+Route::post('notification/mymessage', 'NotificationController@read');
 
 Route::get('/logout', 'UsersController@logout');
 
