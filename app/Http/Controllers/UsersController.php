@@ -57,7 +57,6 @@ class UsersController extends Controller
 
     public function changeAvatar(Request $request)
     {
-    	
     	$file = $request->file('avatar');
     	$input = array('image' => $file);
         $rules = array(
@@ -105,7 +104,8 @@ class UsersController extends Controller
     }
     public function password()
     {
-        return view('users.password');
+        $notifys = $this->notification->GetUserNotifyUnread(\Auth::user()->id);
+        return view('users.password',compact('notifys'));
     }
 
     public function changePassword(Requests\UserPasswordRequest $request)

@@ -78,7 +78,7 @@ $(document).ready(function() {
             });
             $("#validation-errors").show();
         } else {
-	
+            
 			var cropBox = $("#cropbox");
 			cropBox.attr('src',response.avatar);
 			$('#photo').val(response.image);

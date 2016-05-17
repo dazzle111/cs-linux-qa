@@ -26,11 +26,18 @@
                 @else
                 <p class="lead" style="font-size:15px"><a>{{$new->username}} </a> {{$new->action}} <a href="/discussions/{{$new->discussion_id}}" id="{{$new->id}}" class="mymessage"> {{$new->title}} </a> {{$new->updated_at->diffForHumans()}}</p>
                 @endif
+
+                @if($new->action == '评论了'  )
+                   <a href="/discussions/{{$new->discussion_id}}"><p class="detail-news">"{{$new->notify->content}}"</p></a>
+                @endif
+
                 @endforeach
               @endif
               @elseif($flag == 'comment')
                @foreach($comments as $comment)
               <p class="lead" style="font-size:15px"><a>{{$comment->username}} </a> {{$comment->action}} <a href="/discussions/{{$comment->discussion_id}}" id="{{$comment->id}}" class="mymessage"> {{$comment->title}} </a> {{$comment->updated_at}}</p>
+              <a href="/discussions/{{$comment->discussion_id}}"><p class="detail-news">"{{$comment->body}}"</p></a>
+              <hr class="hr">
               @endforeach
               @elseif($flag == 'follow')
                @foreach($follows as $follow)
@@ -39,10 +46,13 @@
               @elseif($flag == 'all')
                @foreach($alls as $all)
               <p class="lead" style="font-size:15px"><a>{{$all->username}} </a> {{$all->action}} <a href="/discussions/{{$all->discussion_id}}" id="{{$all->id}}" class="mymessage"> {{$all->title}} </a> {{$all->updated_at}}</p>
+              @if($all->action == '回复了')
+                  <a href="/discussions/{{$all->discussion_id}}"><p class="detail-news">"{{$all->body}}"</p></a>
+              @endif
               @endforeach
               @endif
             </div>
-            <hr>
+            
         </div>
         <div class="col-md-3">
            <div class="bs-docs-example">
@@ -50,7 +60,7 @@
                   <li class="active"><a href="#">导航栏</a></li>
                   <li><a href="/notification?flag=all">所有动态({{count($alls)}})</a></li>
                   <li><a href="/notification?flag=new">我的消息({{count($news)}})</a></li>
-                  <li><a href="/notification?flag=comment">我的评论({{count($comments)}})</a></li>
+                  <li><a href="/notification?flag=comment">我的回复({{count($comments)}})</a></li>
                   <li><a href="/notification?flag=follow">我的关注({{count($follows)}})</a></li>
               </ul>
           </div>

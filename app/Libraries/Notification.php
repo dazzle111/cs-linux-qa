@@ -20,8 +20,8 @@ class Notification
 		#获取新插入的notify
 		if($result == true && $type == 1)
 		{
-			$new_notify = Notify::where('sender_id',$sender_id)->where('target_id',$target_id)->where('target_type',$target_type)->where('action',$action)->first();
-		
+			$new_notify = Notify::where('sender_id',$sender_id)->where('target_id',$target_id)->where('target_type',$target_type)->where('action',$action)->latest()->first();
+		    
 			$users = null;
 			
 			#获取与notify相关user
@@ -56,11 +56,13 @@ class Notification
     public  function CreateNotify($target_id,$target_type="",$action="",$sender_id,$content="",$type=1)
     {
         $notify = new Notify;
-        //检查消息是否已存在
 
+        //检查消息是否已存在
         $check = Notify::where('sender_id',$sender_id)->where('target_id',$target_id)->where('target_type',$target_type)->where('action',$action)->get();
    		
-        if(count($check) == 0) {
+        //第一次评论或者在同一个问题下再次评论
+        if((count($check) == 0) || (count($check) >= 1 && $action = "comment")) 
+        {
 	        $notify->content = $content;
 	        $notify->type = $type;
 	        $notify->target_id = $target_id;
@@ -70,11 +72,7 @@ class Notification
 
 	        $notify->save();
     	}
-    	if(count($check) > 1)
-    	{
-    		return json_encode(array('status'=>false, 'info'=>'more than one notifies in DB'));
-    	}
-
+       
         return true;
     }
 
@@ -93,6 +91,7 @@ class Notification
 		    	$usernotify->save();
     		}
     	}
+
 
     	return true;
     }

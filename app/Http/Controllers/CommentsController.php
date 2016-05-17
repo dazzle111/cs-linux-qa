@@ -25,7 +25,7 @@ class CommentsController extends Controller
         $discussion_id = $request->get('discussion_id');
         $user_id = $request->get('user_id');
 
-        $this->notification->WrapperNotify($target_id = $discussion_id, $target_type = 'discussion', $action = 'comment', $sender_id = $user_id, "", 1);
+        $this->notification->WrapperNotify($target_id = $discussion_id, $target_type = 'discussion', $action = 'comment', $sender_id = $user_id, $request->get('body'), 1);
 
     	return redirect()->action('PostsController@show', ['id' => $request->get('discussion_id')]);
     }
@@ -35,7 +35,9 @@ class CommentsController extends Controller
         $discussion = $id;
         $comment = Comment::findOrFail($id1);
 
-        return view('forum.editcomment',compact('comment','discussion'));
+        $notifys = $this->notification->GetUserNotifyUnread(\Auth::user()->id);
+        return view('forum.editcomment',compact('comment','discussion','notifys'));
+
     }
 
     public function changeComment(Requests\PostCommentRequest $request, $id, $id1)

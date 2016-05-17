@@ -21,16 +21,20 @@
 			<div class="media-body">
 			<h4 class="media-heading">
 				@if($discussion->is_top == 1)
-				<a href="/discussions/{{ $discussion->id }}" style="">{{ $discussion->title }}</a>
-				<i class="icon-top" alt="置顶" title="置顶">置顶</i>
+				<a href="/discussions/{{ $discussion->id }}" class="index-title" style="color:#337ab7">
+					{{ $discussion->title }}
+					<i class="icon-top" alt="置顶" title="置顶">置顶</i>
+	
+				</a>
+				
 				@else
-				<a href="/discussions/{{ $discussion->id }}">{{ $discussion->title }}</a>
+				<a href="/discussions/{{ $discussion->id }}" class="index-title" style="color:#337ab7">{{ $discussion->title }}</a>
 				@endif
 			</h4>
 			
 			<div class="media-conversation-meta">
 			<span class="media-conversation-replies">
-				<div class="center-block"><a href="/discussions/{{$discussion->id}}" > {{count($discussion->comments)}}</a></div>
+				<div class="center-block"><a href="/discussions/{{$discussion->id}}"> {{count($discussion->comments)}}</a></div>
 				<i class="fa fa-envelope-square fa-3x " aria-hidden="true"></i>
 			</span>
 			</div>
@@ -39,7 +43,7 @@
 				{{ $discussion->user->name }}发表于{{$discussion->created_at->diffForHumans()}}
 				</span>
 			</div>
-			<div class="item-excerpt col-md-10">
+			<div class="item-excerpt col-md-10" style="">
 				<span>{{$discussion->body}}</span>
 			</div>
 			</div>

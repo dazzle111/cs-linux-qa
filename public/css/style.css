@@ -131,3 +131,27 @@ hr{
     color:#dc4349;
     font-family: "Candara";
  }
+ .detail-news{
+    text-indent: 2em;
+    color:gray;
+    margin-top: -2px;
+ }
+ .hr{
+    margin-right: 480px;
+    margin-left: -12px;
+ }
+.index-title{
+    font-size:22px;
+    font-family: "Lato";
+}
+.username{
+    font-family: "Verdana";
+    color:gray;
+    font-style: italic;
+}
+
+.item-excerpt{
+    text-indent:2em; 
+    font-family:"Arial";
+    color:;
+}

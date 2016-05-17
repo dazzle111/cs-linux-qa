@@ -6,7 +6,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-10" role="main">
-            <p>相关搜索如下：</p>
+            <p style="margin-top:20px">相关搜索如下：</p>
             @foreach($discussions as $discussion)
                 <div class="media">
                 <div class="media-left">

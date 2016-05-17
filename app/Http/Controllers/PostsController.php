@@ -27,7 +27,7 @@ class PostsController extends Controller
         $this->markdown = $markdown;
 
 	}
-    
+
     public function index()
     {
     	$discussions = Discussion::orderBy('is_top','desc')->latest()->paginate(10);
@@ -101,7 +101,7 @@ class PostsController extends Controller
 
     public function create()
     {
-         $notifys = $this->notification->GetUserNotifyUnread(\Auth::user()->id);
+        $notifys = $this->notification->GetUserNotifyUnread(\Auth::user()->id);
     	return view('forum.create',compact('notifys'));
     }
 
@@ -111,8 +111,8 @@ class PostsController extends Controller
         if(\Auth::user()->id !== $discussion->user_id) {
             return redirect('/');
         }
-
-        return view('forum.edit', compact('discussion'));      
+         $notifys = $this->notification->GetUserNotifyUnread(\Auth::user()->id);
+        return view('forum.edit', compact('discussion','notifys'));      
     }
 
     public function destroy(Request $request)
@@ -152,10 +152,13 @@ class PostsController extends Controller
 
     public function search(Request $request)
     {
+        $notifys = '';
         $content = $request->get('content');
         $discussions = Discussion::where('title','like','%'.$content.'%')->orWhere('body','like','%'.$content.'%')->latest()->paginate(10);
-
-        return view('forum.search',['discussions'=>$discussions]);
+        if(\Auth::check()){
+            $notifys = $this->notification->GetUserNotifyUnread(\Auth::user()->id);
+        }
+        return view('forum.search',compact('discussions','notifys'));
     }
 
     public function manage(Request $request)

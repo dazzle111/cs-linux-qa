@@ -21,7 +21,11 @@ class NotificationController extends Controller
         
         $flag = $request->get('flag');
        
-   		
+   		if(!\Auth::check())
+      {
+          return redirect('/');
+      }
+
    		{
         //我的消息
         $notifys = $this->notification->GetUserNotifyUnread(\Auth::user()->id);
