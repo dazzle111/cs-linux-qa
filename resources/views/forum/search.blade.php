@@ -15,7 +15,7 @@
                 </a>
                 </div>
                 <div class="media-body">
-                <h4 class="media-heading"><a href="/discussions/{{ $discussion->id }}">{{ $discussion->title }}</a></h4>
+                <h4 class="media-heading" ><a href="/discussions/{{ $discussion->id }}" style="color:#337ab7;font-size:22px;font-family:Lato">{{ $discussion->title }}</a></h4>
                 
                 <div class="media-conversation-meta">
                 <span class="media-conversation-replies">

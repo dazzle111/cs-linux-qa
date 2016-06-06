@@ -175,10 +175,17 @@ class PostsController extends Controller
         $discussion_id = $request->get('discussion_id');
 
         $discussion = Discussion::findOrFail($discussion_id);
-        $discussion->is_top = 1;
-        $discussion->save();
-
-        $this->notification->WrapperNotify($target_id = $discussion_id, $target_type = 'discussion', $action = 'top', $sender_id = \Auth::user()->id, "", 1);
+        if($discussion->is_top == 1)
+        {
+            $discussion->is_top = 0;
+            $discussion->save();
+        }
+        else 
+        {
+            $discussion->is_top = 1;
+            $discussion->save();
+            $this->notification->WrapperNotify($target_id = $discussion_id, $target_type = 'discussion', $action = 'top', $sender_id = \Auth::user()->id, "", 1);
+        }
         return \Response::json(array("status" => "success"));
     }
     

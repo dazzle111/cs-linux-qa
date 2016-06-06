@@ -3,7 +3,7 @@
 @section('content')
     <div>
         <div class="row">
-            <div class="col-md-6 col-md-offset-3" role="main">
+            <div class="col-md-4 col-md-offset-4" role="main" style="margin-top:48px">
                 @if($errors->any())
                 <ul class="list-group">
                 @foreach($errors->all() as $error)

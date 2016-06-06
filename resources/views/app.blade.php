@@ -3,10 +3,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>西邮Linux兴趣小组QA平台</title>
+    <title>Linux兴趣小组 | QA平台</title>
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/font-awesome.css">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/jquery.atwho.css">
     <link rel="stylesheet" href="/css/jquery.Jcrop.css">
     <script src="/js/jquery-2.2.3.min.js"></script>   
     <script src="/js/jquery.Jcrop.min.js"></script>
@@ -51,7 +52,7 @@
             @if(Auth::check())
               <li><a id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true">{{Auth::user()->name }}</a>
               <ul class="dropdown-menu" aria-labelledby="dLabel">
-                <li><a href="/user/avatar"> <i class="fa fa-user"></i> 更换头像</a></li>
+                <li><a href="/user/profile"> <i class="fa fa-user"></i> 个人中心</a></li>
                 <li><a href="/user/password"> <i class="fa fa-cog"></i> 更换密码</a></li>
                 @if(Auth::user()->permission == 1)
                   <li><a href="/discussions/manage"> <i class="fa fa-file-text"></i> 管理帖子</a></li>

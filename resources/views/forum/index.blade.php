@@ -35,7 +35,7 @@
 			<div class="media-conversation-meta">
 			<span class="media-conversation-replies">
 				<div class="center-block"><a href="/discussions/{{$discussion->id}}"> {{count($discussion->comments)}}</a></div>
-				<i class="fa fa-envelope-square fa-3x " aria-hidden="true"></i>
+				<i class="fa fa-envelope-square fa-3x " aria-hidden="true" style="color:#337ab7"></i>
 			</span>
 			</div>
 			<div>

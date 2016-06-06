@@ -155,3 +155,12 @@ hr{
     font-family:"Arial";
     color:;
 }
+.img-wrapper{
+    width: 200px;
+    height: 200px;
+    margin-right:36px;
+    margin-top: 48px;
+}
+.panel-top{
+    margin-top: 48px;
+}

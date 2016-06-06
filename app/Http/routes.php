@@ -28,6 +28,7 @@ Route::post('comment/api/create', 'CommentsController@check');
 Route::post('accept', 'CommentsController@accept');
 
 Route::get('/user/register', 'UsersController@register');
+Route::get('/user/profile', 'UsersController@profile');
 Route::get('/user/login', 'UsersController@login');
 Route::get('/user/avatar', 'UsersController@avatar');
 Route::post('/user/register', 'UsersController@store');
@@ -36,6 +37,7 @@ Route::get('/user/password', 'UsersController@password');
 Route::post('/user/password', 'UsersController@changePassword');
 Route::get('/user/lost', 'UsersController@lost');
 Route::get('/user/name', 'UsersController@username');
+Route::post('/user/profile','UsersController@update');
 
 Route::post('/thumbs', 'LikesController@likes');
 

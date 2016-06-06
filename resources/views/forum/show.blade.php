@@ -187,6 +187,7 @@
 </div>
 <div class="bottom">
 </div>
+
 <script>
 	
 	Date.prototype.Format = function(fmt)   
@@ -252,7 +253,9 @@
     inputer.atwho({
         at: "@",
         data:"http://localhost:8000/user/name",
-        displayTpl:"<li> ${name} </li>",
+        insertTpl:'@${name}',
+        displayTpl:'<li> ${name} </li>',
+        startWithSpace:true,
         //data:['hello',],
         limit:7
     });
@@ -261,15 +264,8 @@
         var data = {
             _token: token,
             name: query[0].textContent,
-            conversation_id: $('#conversation_id').val(),
             status: "on"
         };
-       $.post(
-                "/comment/api/create",data,function(response){
-                    if(response.status === 'success'){
-                    }
-                },"json");
-
     });
     inputer.keydown(function (event) {
         if ( event.keyCode == 13 && (event.metaKey || event.ctrlKey)) {
@@ -354,10 +350,14 @@
 
     $('.follow').click(function(){
 
-    	 if($("#"+this.id).hasClass('a')){
+    	 if($('#'+this.id).hasClass('a')){
+            $('#'+this.id).removeClass('a');
  		 	$('#'+this.id).text("取消关注");
+            $('#'+this.id).addClass('b');
  		 } else if($("#"+this.id).hasClass('b')) {
+            $('#'+this.id).removeClass('b');
  		 	$('#'+this.id).text("关注问题");
+            $('#'+this.id).addClass('a');
  		 }
          $.ajax({
              type: "post",

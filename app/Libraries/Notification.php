@@ -8,7 +8,6 @@ class Notification
 	public function test()
 	{
 		 $notification = Notify::all();
-         dd($notification);
 	}
 
 	#type:1.消息,2.公告 action:comment,follow,like,accept

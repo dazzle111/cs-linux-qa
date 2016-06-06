@@ -37,7 +37,11 @@
                   <td><a href="/discussions/{{$discussion->id}}">{{$discussion->title}}</a></td>
                   <td>{{$discussion->created_at}}</td>
                   <td class="operation" >
-                    <button type="button" class="btn btn-sm btn-success" onclick="set_top({{$discussion->id}})">置顶</button>
+                    @if($discussion->is_top == 0)
+                    <button type="button" class="btn btn-sm btn-success set-top"  id="{{$discussion->id}}">置顶</button>
+                    @elseif($discussion->is_top == 1)
+                    <button type="button" class="btn btn-sm btn-primary set-top"  id="{{$discussion->id}}">取消</button>
+                    @endif
                     <button type="button" class="btn btn-sm btn-danger" onclick="drop_discussion({{$discussion->id}})">删除</button>
                   </td>
                 </tr>
@@ -59,13 +63,25 @@
   <script>
     var token = document.querySelector('#token').getAttribute('value');
 
-    function set_top(e){
-      var top = confirm('确认置顶');
+   // function set_top(e){
+    $(".set-top").click(function()
+    {
+      debugger
+      var tips = "确认置顶";
+      if($("#"+this.id).hasClass('btn-success'))
+      {
+        tips = "确认置顶";
+      }
+      else if($("#"+this.id).hasClass('btn-primary'))
+      {
+        tips = "取消置顶";
+      }
+      var top = confirm(tips);
       if(top) {
             $.ajax({
              type: "post",
              url: "/discussions/top/",
-             data: {discussion_id:e, _token:token},
+             data: {discussion_id:this.id, _token:token},
              dataType: "json",
              success: function(data){
                 if(data['status'] == 'success')
@@ -77,9 +93,9 @@
                 }
              }
          });
-
-      }
-    }
+       }
+    });
+    
 
     function drop_discussion(e){
 

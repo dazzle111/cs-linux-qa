@@ -24,9 +24,18 @@ class UsersController extends Controller
 
     public function store(Requests\UserRegisterRequest $request)
     {
-    	User::create(array_merge($request->all(),['avatar' => '/images/default-avatar.jpg']));
+    	User::create(array_merge($request->all(),['avatar' => '/images/default-avatar.jpg','grade' => '2016', 'major'=>'软件工程','motto'=>'生活就像海洋，只有意志坚定的人才能到达彼岸!']));
     		//send mail
     	return redirect('/');
+    }
+
+    public function update(Requests\UserProfileRequest $request)
+    {
+ 
+        $user = User::findOrFail(\Auth::user()->id);
+        $user->update($request->all());
+        $result = json_encode(array('state' => 'success'));
+        return $result;
     }
 
     public function login()
@@ -128,6 +137,18 @@ class UsersController extends Controller
     	return redirect('/');
     }
 
+    public function profile()
+    {
+        if(\Auth::check()){
+            $notifys = $this->notification->GetUserNotifyUnread(\Auth::user()->id);
+            return view('users.profile',compact('notifys'));
+        }
+        else 
+        {
+            return redirect('/');
+        }
+        
+    }
     public function username()
     {
         $name = DB::table('users')->select('name')->get();
